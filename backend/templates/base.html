@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Smart Plant</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #e8f5e9, #f1f8e9);
+            display: flex;
+            transition: 0.3s;
+            overflow-x: hidden;
+        }
+
+        body.dark {
+            background: linear-gradient(135deg, #1e1e1e, #2c2c2c);
+            color: white;
+        }
+
+        /*  Animated Background! */
+        body::before {
+            content: "";
+            position: fixed;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background:
+                radial-gradient(circle at 20% 20%, rgba(46,125,50,0.15), transparent 30%),
+                radial-gradient(circle at 80% 80%, rgba(76,175,80,0.15), transparent 30%);
+            animation: moveBg 15s linear infinite;
+            z-index: -1;
+        }
+
+        @keyframes moveBg {
+            0% { transform: translate(0,0); }
+            50% { transform: translate(5%,5%); }
+            100% { transform: translate(0,0); }
+        }
+
+        .sidebar {
+            width: 240px;
+            height: 100vh;
+            background: linear-gradient(180deg, #2e7d32, #1b5e20);
+            color: white;
+            padding-top: 30px;
+            position: fixed;
+            transition: 0.3s;
+        }
+
+        body.dark .sidebar {
+            background: linear-gradient(180deg, #121212, #1e1e1e);
+        }
+
+        .sidebar h2 {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .sidebar a {
+            display: block;
+            padding: 15px 25px;
+            color: white;
+            text-decoration: none;
+            transition: 0.3s;
+        }
+
+        .sidebar a:hover {
+            background: rgba(255,255,255,0.2);
+        }
+
+        .content {
+            margin-left: 240px;
+            padding: 50px;
+            width: 100%;
+        }
+
+        .card {
+            background: white;
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+            margin-bottom: 30px;
+            transition: 0.3s;
+        }
+
+        body.dark .card {
+            background: #2c2c2c;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+        }
+
+        /* Stronger Animated Glowyy when OK!! */
+        .ok {
+            border-left: 8px solid #2e7d32;
+            animation: glowPulse 2s infinite;
+        }
+
+        @keyframes glowPulse {
+            0% { box-shadow: 0 0 15px rgba(46,125,50,0.6); }
+            50% { box-shadow: 0 0 40px rgba(46,125,50,1); }
+            100% { box-shadow: 0 0 15px rgba(46,125,50,0.6); }
+        }
+
+        body.dark .ok {
+            animation: glowPulseDark 2s infinite;
+        }
+
+        @keyframes glowPulseDark {
+            0% { box-shadow: 0 0 15px rgba(0,255,150,0.6); }
+            50% { box-shadow: 0 0 45px rgba(0,255,150,1); }
+            100% { box-shadow: 0 0 15px rgba(0,255,150,0.6); }
+        }
+
+        .alert {
+            border-left: 8px solid #c62828;
+        }
+
+        /*  Plant Pulse Animation */
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.08); }
+            100% { transform: scale(1); }
+        }
+
+    </style>
+</head>
+
+<body>
+
+<div class="sidebar">
+    <h2>🌱 Smart Plant</h2>
+    <a href="/">Dashboard</a>
+    <a href="/history">History</a>
+    <a href="/analytics">Analytics</a>
+
+    <div style="margin-top:40px; padding:20px;">
+        <button onclick="toggleDarkMode()" 
+            style="width:100%; padding:10px; border:none; border-radius:10px; cursor:pointer;">
+            🌙 Toggle Dark Mode
+        </button>
+    </div>
+</div>
+
+<div class="content">
+    {% block content %}{% endblock %}
+</div>
+
+<script>
+    function toggleDarkMode() {
+        document.body.classList.toggle("dark");
+        localStorage.setItem("theme",
+            document.body.classList.contains("dark") ? "dark" : "light");
+    }
+
+    if (localStorage.getItem("theme") === "dark") {
+        document.body.classList.add("dark");
+    }
+</script>
+
+</body>
+</html>
