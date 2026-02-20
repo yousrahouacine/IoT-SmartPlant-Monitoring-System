@@ -21,4 +21,4 @@ ESP8266 → MQTT → Backend → Telegram / Web Interface
 - /analysis → Project documentation
 - /esp8266 → Microcontroller code
 - /backend → Server-side API and logic
-- /images → Architecture and wiring diagrams
+
