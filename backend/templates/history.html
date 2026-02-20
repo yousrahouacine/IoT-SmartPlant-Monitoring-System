@@ -1,0 +1,105 @@
+{% extends "base.html" %}
+{% block content %}
+
+<h1 style="margin-bottom:30px;">📜 History</h1>
+
+{% if history %}
+
+<div class="card">
+    <table class="history-table">
+        <thead>
+            <tr>
+                <th>Time</th>
+                <th>Temp (°C)</th>
+                <th>Humidity (%)</th>
+                <th>Light</th>
+                <th>Soil (%)</th>
+                <th>Rain</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for row in history %}
+            <tr>
+                <td>{{ row.timestamp }}</td>
+                <td>{{ row.temperature }}</td>
+                <td>{{ row.humidity }}</td>
+                <td>{{ row.light }}</td>
+                <td>{{ row.soil }}</td>
+                <td>{{ row.rain }}</td>
+                <td>
+                    <span class="status-badge 
+                        {% if row.status == 'OK' %}
+                            status-ok
+                        {% else %}
+                            status-alert
+                        {% endif %}
+                    ">
+                        {{ row.status }}
+                    </span>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+{% else %}
+
+<div class="card">
+    <h2>No history available</h2>
+</div>
+
+{% endif %}
+
+<style>
+.history-table {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: center;
+}
+
+.history-table th {
+    padding: 14px;
+    font-weight: 600;
+    font-size: 15px;
+    border-bottom: 2px solid #ccc;
+}
+
+.history-table td {
+    padding: 12px;
+    font-size: 14px;
+}
+
+.history-table tbody tr:nth-child(even) {
+    background: rgba(0,0,0,0.03);
+}
+
+body.dark .history-table tbody tr:nth-child(even) {
+    background: rgba(255,255,255,0.05);
+}
+
+.history-table tbody tr:hover {
+    background: rgba(46,125,50,0.08);
+    transition: 0.2s;
+}
+
+/* STATUS BADGES */
+.status-badge {
+    padding: 6px 14px;
+    border-radius: 20px;
+    color: white;
+    font-weight: 500;
+    font-size: 13px;
+}
+
+.status-ok {
+    background: #2e7d32;
+}
+
+.status-alert {
+    background: #c62828;
+}
+</style>
+
+{% endblock %}
