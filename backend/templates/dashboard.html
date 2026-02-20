@@ -1,0 +1,90 @@
+{% extends "base.html" %}
+{% block content %}
+
+<h1 style="margin-bottom:30px;">🌿 Dashboard</h1>
+
+{% if latest %}
+
+<!--  PLANT IMAGE -->
+<div style="text-align:center; margin-bottom:30px;">
+    <img id="plantImage"
+         src="{{ url_for('static', filename='healthy.png') if latest.status == 'OK' else url_for('static', filename='unhealthy.png') }}"
+         style="width:180px; transition:0.5s;">
+</div>
+
+<div id="statusCard" class="card {{ 'alert' if latest.status != 'OK' else 'ok' }}">
+    <h2>Current Status</h2>
+    <h3 id="status">{{ latest.status }}</h3>
+    <p id="action">{{ latest.action }}</p>
+</div>
+
+<div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(220px,1fr)); gap:20px;">
+
+    <div class="card">
+        <h3>🌡 Temperature</h3>
+        <p id="temp">{{ latest.temperature }} °C</p>
+    </div>
+
+    <div class="card">
+        <h3>💧 Humidity</h3>
+        <p id="humidity">{{ latest.humidity }} %</p>
+    </div>
+
+    <div class="card">
+        <h3>☀ Light</h3>
+        <p id="light">{{ latest.light }}</p>
+    </div>
+
+    <div class="card">
+        <h3>🌱 Soil</h3>
+        <p id="soil">{{ latest.soil }} %</p>
+    </div>
+
+    <div class="card">
+        <h3>🌧 Rain</h3>
+        <p id="rain">{{ latest.rain }}</p>
+    </div>
+
+</div>
+
+{% endif %}
+
+<script>
+function updateData() {
+    fetch("/api/latest")
+    .then(response => response.json())
+    .then(data => {
+        if (!data) return;
+
+        document.getElementById("status").innerText = data.status;
+        document.getElementById("action").innerText = data.action;
+        document.getElementById("temp").innerText = data.temperature + " °C";
+        document.getElementById("humidity").innerText = data.humidity + " %";
+        document.getElementById("soil").innerText = data.soil + " %";
+        document.getElementById("light").innerText = data.light;
+        document.getElementById("rain").innerText = data.rain;
+
+        let card = document.getElementById("statusCard");
+        let plant = document.getElementById("plantImage");
+
+        if (data.status !== "OK") {
+            card.classList.remove("ok");
+            card.classList.add("alert");
+
+            plant.src = "/static/unhealthy.png";
+            plant.style.animation = "pulse 1s infinite";
+
+        } else {
+            card.classList.remove("alert");
+            card.classList.add("ok");
+
+            plant.src = "/static/healthy.png";
+            plant.style.animation = "none";
+        }
+    });
+}
+
+setInterval(updateData, 5000);
+</script>
+
+{% endblock %}
